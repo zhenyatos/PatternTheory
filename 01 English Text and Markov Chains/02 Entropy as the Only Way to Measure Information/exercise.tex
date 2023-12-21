@@ -1,0 +1,214 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper,
+            bindingoffset=0.2in,
+            left=1in,
+            right=1in,
+            top=1in,
+            bottom=1in,
+            footskip=.25in]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{tcolorbox}
+\usepackage{cancel}
+\usepackage{bbm}
+\usepackage{enumitem}
+\usepackage{physics}
+\usepackage{amssymb}
+\usepackage{pgfplots}
+\pgfplotsset{width=10cm,compat=1.9}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\newcommand*{\del}{\mathrm{d}}
+
+\newtheorem{proposition}{Proposition}
+
+\title{Entropy as the "Only Way to Measure Information"}
+\author{Evgenii Samutichev}
+
+\begin{document}
+
+\maketitle
+
+\begin{tcolorbox}
+    \textbf{Theorem} Let $H : (p_1, ..., p_n) \to H(p_1, p_2, ..., p_n)$ be a positive symmetric\footnote{Reasonable additional assumption, without it I've no idea how to proceed} function defined on finite probability distributions. If $H$ has the following properties
+    \begin{enumerate}[label=(\roman*)]
+        \item $H$ is continuous in the $p_i$'s 
+        \item If all $p_i$ areequal, $p_i = 1/n$, then $H$ should be a monotonic increasing function of $n$ (This means: "With equally likely events, there is more choice, or uncrertainty,when there are more possible events")
+        \item \begin{equation}\label{eq:1}
+        H(p_1, p_2, ..., p_n) = H(p_1 + p_2, p_3, ..., p_n) + (p_1+p_2)H\left(\frac{p_1}{p_1 + p_2}, \frac{p_2}{p_1 + p_2}\right)
+        \end{equation}
+        which means: "If you first make a choice ignoring the difference between 1 and 2, and then, if 1 and 2 came up, you choose one of them, the original $H$ should be the weighted sum of the individual values of $H$ in the formula above"
+    \end{enumerate}
+    Then, there exists a positive constant $C$ s.t.
+    \begin{equation}
+        H(p_1, p_2, ..., p_n) = -C\sum_{i}{p_i \log p_i}
+    \end{equation}
+    The choice of $C$ amounts to the choice of a unit of measure.
+\end{tcolorbox}
+
+\begin{proof}
+    $ $ 
+    \noindent \textbf{Part 1} Property \eqref{eq:1} can be extended by induction on the number of "glued together" values. If it's true for $k$, then for $k+1$ denote $p = p_1 + p_2 + ... + p_{k+1}$ and
+    \begin{align*}
+        H(p_1, p_2, ..., p_k, p_{k+1}, ..., p_n) &= H(p_1 + p_2, p_3, ..., p_n) + (p_1 + p_2)H(\tfrac{p_1}{p_1 +p_2}, \tfrac{p_2}{p_1 +p_2}) = \\
+        &= H((p_1 + p_2) + ... + p_{k+1}, ..., p_n) + \\
+        &+ p H(\tfrac{p_1+p_2}{p}, \tfrac{p_3}{p}, ..., \tfrac{p_{k+1}}{p}) + (p_1 + p_2) H(\tfrac{p_1}{p_1 +p_2}, \tfrac{p_2}{p_1 +p_2}) = \\
+        &= H(p, ..., p_n) + p H(\tfrac{p_1}{p}, ..., \tfrac{p_{k+1}}{p}) - p \tfrac{p_1+p_2}{p}H(\tfrac{p_1}{p_1 +p_2}, \tfrac{p_2}{p_1 +p_2}) + \\
+        &+ (p_1 + p_2) H(\tfrac{p_1}{p_1 +p_2}, \tfrac{p_2}{p_1 +p_2}) = \\
+        &=  H(p, ..., p_n) + p H(\tfrac{p_1}{p}, ..., \tfrac{p_{k+1}}{p})
+    \end{align*}
+    
+    For a positive integer $n$ define $A(n) = H(\frac{1}{n}, ..., \frac{1}{n})$. Then
+    \begin{equation}
+        A(n^2) = H\left(\frac{1}{n^2}, ..., \frac{1}{n^2}\right)
+    \end{equation}
+    but 
+    \begin{equation}
+        \frac{1}{n} = \sum_{k=1}^{n}{\frac{1}{n^2}}
+    \end{equation}
+    so we can use the extended property $(iii)$ and symmetricity of $H$
+    \begin{align*}
+        A(n^2) &= H(\tfrac{1}{n}, \tfrac{1}{n^2}, ..., \tfrac{1}{n^2}) + \tfrac{1}{n} H(\tfrac{1}{n}, ..., \tfrac{1}{n}) = ... = H(\tfrac{1}{n}, ..., \tfrac{1}{n}) +\\
+        &+ (\tfrac{1}{n} + ... + \tfrac{1}{n})H(\tfrac{1}{n}, ..., \tfrac{1}{n}) = A(n) + A(n) = 2A(n)
+    \end{align*}
+    Again, we continue by induction, if it's true for $k$ that $A(n^k) = kA(n)$, then for $k+1$ 
+    \begin{equation}
+        A(n^{k+1}) = A(n^k) + (\underbrace{\tfrac{1}{n^{k}} + ... + \tfrac{1}{n^{k}}}_{n^k \text{ terms}})A(n) = kA(n) + A(n) = (k+1)A(n)
+    \end{equation}
+    where we used 
+    \begin{equation}
+        \frac{1}{n^k} = \sum_{k=1}^{n}{\frac{1}{n^{k+1}}}
+    \end{equation}
+    and 
+    \begin{equation}
+        \frac{\frac{1}{n^{k+1}}}{\sum_{k=1}^{n}{\frac{1}{n^{k+1}}}} = \frac{n^k}{n^{k+1}} = \frac{1}{n}
+    \end{equation}
+
+An immediate consequence of that property is $A(1) = 0$, since 
+\begin{equation}
+    A(1) = A(1^2) = 2A(1) \implies A(1) = 0
+\end{equation}
+
+\noindent \textbf{Part 2}
+
+Intervals
+\begin{equation}
+    [0, \log m], [\log m, 2\log m], ..., [\ell \log m, (\ell + 1) \log m], ...
+\end{equation}
+cover the entire nonnegative real line. Thus, for $k \log n \geq 0$ there exists $\ell$ s.t. 
+\begin{equation}\label{eq:2}
+    \ell \log m \leq k \log n \leq (\ell +1 )\;og m
+\end{equation}
+and by exponentiating we get that for all $m > 1, n > 1$ and $k \geq 1$ there exists $\ell \in \mathbb{N}$ s.t.
+\begin{equation}
+    m^\ell \leq n^k \leq m^{\ell + 1}
+\end{equation}
+
+Now, using the property we have proven in \textbf{part 1} and assumption $(ii)$ giving us that $A(n)$ is monotonic increasing function of $n$, we get 
+\begin{equation}
+    A(m^\ell) \leq A(n^k) \leq A(m^{\ell +1})
+\end{equation}
+and 
+\begin{equation}
+    \ell A(m) \leq k A(n) \leq (\ell +1) A(m)
+\end{equation}
+
+Dividing both sides by $A(m) > A(1) = 0$ and $k \geq 1$ we derive
+\begin{equation}
+    \frac{\ell}{k} \leq \frac{A(n)}{A(m)} \leq \frac{\ell + 1}{k}
+\end{equation}
+
+From \eqref{eq:2} we can similarly derive
+\begin{equation}
+    \frac{\ell}{k} \leq \frac{\log n}{\log m} \leq \frac{\ell +1}{k}
+\end{equation}
+
+And combining these two inequalities together, we conclude that 
+\begin{equation}
+    \abs{\frac{A(n)}{A(m)} - \frac{\log n}{\log m}} \leq \frac{1}{k}
+\end{equation}
+notice how it doesn't depend on $\ell$ anymore and $k$ is arbitrary.
+
+Thus, by letting $k \to \infty$ we have 
+\begin{equation}
+    \frac{A(n)}{A(m)} = \frac{\log n}{\log m}
+\end{equation}
+
+Rearranging terms we get that for all $n, m > 1$
+\begin{equation}
+    \frac{A(n)}{\log n} = \frac{A(m)}{\log m} = C 
+\end{equation}
+where $C > 0$ is some constant. So 
+\begin{equation}
+    A(n) = C \log n 
+\end{equation}
+and this is true for all $n \geq 1$, since for $n = 1$ it's trivially  true.
+
+\noindent \textbf{Part 3}
+We can apply the extended property $(iii)$ of $H$, that we proved in \textbf{part 1}. If $p_i = n_i / \sum_{j=1}^{n}{n_j}$ for some integers $n_1, ..., n_n$, then defining $p = \sum_{j=1}^{n_j}$ gives us 
+\begin{equation}
+    A(p) = H\left(\frac{1}{p}, ..., \frac{1}{p}\right) = H\left(\sum_{j=1}^{n_1}{\frac{1}{p}}, ..., \sum_{j=1}^{n_n}{\frac{1}{p}}\right) + \sum_{i=1}^{n}{H\left(\frac{1}{n_i}, ..., \frac{1}{n_i}\right)\sum_{j=1}^{n_i}{\frac{1}{p}}}
+\end{equation}
+and since by definition 
+\begin{equation}
+    A(n_i) = H\left(\frac{1}{n_i}, ..., \frac{1}{n_i}\right)
+\end{equation}
+and also 
+\begin{equation}
+    \sum_{j=1}^{n_i}{\frac{1}{p}} = \frac{n_i}{p} = p_i 
+\end{equation}
+we conclude by applying the result of \textbf{part 2} that 
+\begin{equation}
+    C \log \sum_{j=1}^{n}{p_i} = C \log p = H(p_1, ..., p_n) + C\sum_{i=1}^{n}{p_i \log n_i  }
+\end{equation}
+
+We can rewrite the left hand side as 
+\begin{equation}
+    C \sum_{i=1}^{n}{p_i \log \sum_{j=1}^{n}{p_i}}
+\end{equation}
+since $\sum_{i=1}^{n}{p_i} = 1$. Then, by moving the second term of the r.h.s to the left we get 
+\begin{equation}\label{eq:3}
+    H(p_1, ..., p_n) = -C \sum_{i=1}^{n}{p_i \log \frac{n_i}{p}} = -C\sum_{i=1}^{n}{p_i \log p_i}
+\end{equation}
+
+\noindent \textbf{Part 4} In fact, we have just proven the result for all discrete probability distributions involving PMF with rational values. That is because we can always make them to have the common denominator. If 
+\begin{equation}
+    p_i = \frac{k_i}{m_i}, \quad i = 1, ..., n
+\end{equation}
+s.t. 
+\begin{equation}
+    \sum_{i=1}^{n}{p_i} = 1 
+\end{equation}
+then 
+\begin{equation}
+    p_i = \frac{k_i}{m_i} = \frac{k_i \prod_{j=1, j \neq i}^{n}{m_j}}{m_1 ... m_n}
+\end{equation}
+and by normalization 
+\begin{equation}
+    \sum_{i=1}{n}{k_i \prod_{j=1, j \neq i}^{n}{m_j}} = m_1 ...  m_n 
+\end{equation}
+so we can take 
+\begin{equation}
+    n_i = k_i \prod_{j=1, j \neq i}^{n}{m_j}
+\end{equation}
+reducing to \textbf{part 3}. As we know, rational numbers are dense in real numbers, so we can simply approximate any sequence $p_1, ..., p_n$ s.t. $\sum_{i=1}^{n}{p_i} = 1$ by $n$ sequences of rational numbers, while also normalizing them. That is, we have $\{r_j^{(i)}\}_{j=1}^{\infty}$ for each $i = 1,..., n$ s.t. $r_j^{(i)} \to p_i$ as $j \to \infty$. But if we normalize, then 
+\begin{equation}
+    h_{j}^{(i)} = \frac{r_j^{(i)}}{\sum_{k=1}^{n}{r_j^{(k)}}} \to \frac{p_i}{1} = p_i 
+\end{equation}
+and by continuity assumption $(i)$ of $H$ we then have 
+\begin{equation}
+    H(h_{j}^{(1)}, ..., h_{j}^{(n)}) \to H(p_1, ..., p_n)
+\end{equation}
+while at the same time 
+\begin{equation}
+    C\sum_{i=1}^{n}{h_j^{(i)} \log h_j^{(i)}} \to C \sum_{i=1}^{n}{p_i \log p_i}
+\end{equation}
+so from \eqref{eq:3} we get by taking the limit, that for all discrete finite probability distributions 
+\begin{equation}
+    H(p_1, ..., p_n) = -C\sum_{i=1}^{n}{p_i \log p_i}
+\end{equation}
+
+\end{proof}
+
+
+\end{document}
